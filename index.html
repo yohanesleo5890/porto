@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yohanes Leonaldo Sinaga — Power Electronics &amp; Robust Control</title>
+<meta name="description" content="Research portfolio of Yohanes Leonaldo Sinaga: H-infinity control of high-gain DC-DC converters, embedded validation on STM32, and machine learning for energy systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4EF; --surface:#FFFFFF; --ink:#15191E; --ink-2:#414A54; --muted:#69737D;
+    --rule:#DDD8CC; --accent:#0E5A6B; --accent-soft:#E1EEF0; --warm:#A4541A; --warm-soft:#F6E8DA;
+    --paper:#FFFFFF;
+  }
+  :root[data-theme="dark"]{
+    --bg:#101417; --surface:#171D21; --ink:#ECEFF0; --ink-2:#C2CAD0; --muted:#93A0A8;
+    --rule:#2A343B; --accent:#74C3D2; --accent-soft:#16323A; --warm:#E6A26A; --warm-soft:#3A2717;
+    --paper:#F4F2EC;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#101417; --surface:#171D21; --ink:#ECEFF0; --ink-2:#C2CAD0; --muted:#93A0A8;
+      --rule:#2A343B; --accent:#74C3D2; --accent-soft:#16323A; --warm:#E6A26A; --warm-soft:#3A2717;
+      --paper:#F4F2EC;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-underline-offset:3px}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+  .wrap{max-width:900px;margin:0 auto;padding:0 22px}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  h1,h2,h3{font-family:"Newsreader",Georgia,serif;font-weight:500;margin:0;text-wrap:balance}
+
+  /* top bar */
+  .bar{display:flex;justify-content:space-between;align-items:center;padding:18px 0;font-size:13px;color:var(--muted)}
+  .bar nav{display:flex;gap:18px;flex-wrap:wrap}
+  .bar nav a{color:var(--muted);text-decoration:none}
+  .bar nav a:hover{color:var(--ink)}
+  .theme{background:none;border:1px solid var(--rule);color:var(--ink-2);border-radius:99px;padding:5px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+
+  /* header */
+  header.hero{padding:36px 0 34px;border-bottom:1px solid var(--rule)}
+  .kicker{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  h1{font-size:clamp(34px,6.4vw,54px);line-height:1.04;letter-spacing:-.01em;margin:12px 0 14px}
+  .lede{font-size:18px;color:var(--ink-2);max-width:60ch;margin:0}
+  .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .links a,.links button{font:inherit;font-size:14px;font-weight:500;text-decoration:none;color:var(--ink);background:var(--surface);
+    border:1px solid var(--rule);border-radius:8px;padding:8px 14px;cursor:pointer}
+  .links a:hover,.links button:hover{border-color:var(--accent);color:var(--accent)}
+  .links .primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+  .links .primary:hover{color:var(--bg);opacity:.9}
+  .contact-note{font-size:13px;color:var(--muted);margin-top:10px;min-height:1.4em}
+
+  section{padding:40px 0;border-bottom:1px solid var(--rule)}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+  .sec-head h2{font-size:27px}
+  .sec-head .n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
+
+  /* interests */
+  .interests{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .interests div{border-top:2px solid var(--accent);padding-top:12px}
+  .interests b{display:block;font-weight:600;margin-bottom:3px}
+  .interests span{font-size:14.5px;color:var(--ink-2)}
+
+  /* projects */
+  .proj{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:26px;margin-bottom:20px}
+  .proj-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:6px}
+  .proj h3{font-size:24px;line-height:1.18;max-width:30ch}
+  .tag{font-family:"IBM Plex Mono",monospace;font-size:11.5px;padding:4px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+  .tag.warm{background:var(--warm-soft);color:var(--warm)}
+  .problem{font-family:"Newsreader",Georgia,serif;font-size:18.5px;color:var(--ink-2);margin:10px 0 16px;max-width:62ch}
+  .proj p{margin:0 0 12px;color:var(--ink-2);max-width:68ch}
+  .proj p b{color:var(--ink);font-weight:600}
+  .split{display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:start}
+  figure{margin:0}
+  figure .frame{background:var(--paper);border:1px solid var(--rule);border-radius:10px;overflow:hidden;padding:10px}
+  figure img{display:block;width:100%;height:auto}
+  figure.pair .frame{display:grid;grid-template-columns:1.45fr 1fr;gap:8px;padding:8px}
+  figure.pair img{border-radius:6px;height:100%;object-fit:cover}
+  figcaption{font-size:12.5px;color:var(--muted);margin-top:8px}
+
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule);border-radius:10px;margin:18px 0 14px;overflow:hidden}
+  .facts > div{padding:13px 15px;border-left:1px solid var(--rule)}
+  .facts > div:first-child{border-left:0}
+  .facts .v{font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+  .facts .l{font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:3px}
+
+  .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;margin:6px 0 16px;font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+  .pipe span{border:1px solid var(--rule);border-radius:6px;padding:5px 9px;color:var(--ink-2);background:var(--bg)}
+  .pipe span.done{border-color:var(--accent);color:var(--accent)}
+  .pipe span.now{border-color:var(--warm);color:var(--warm);border-style:dashed}
+  .pipe i{font-style:normal;color:var(--muted)}
+
+  .meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:13px;margin-top:6px}
+  .meta a{font-weight:500}
+  .note{font-size:13px;color:var(--muted)}
+
+  /* lists */
+  .pubs{list-style:none;margin:0;padding:0}
+  .pubs li{padding:14px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:118px 1fr;gap:16px}
+  .pubs li:first-child{border-top:0;padding-top:0}
+  .pubs .st{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--accent);padding-top:4px;text-transform:uppercase;letter-spacing:.04em}
+  .pubs .st.w{color:var(--warm)}
+  .pubs .t{font-weight:500}
+  .pubs .a{font-size:14px;color:var(--ink-2)}
+  .rows{display:grid;gap:0}
+  .row{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:13px 0;border-top:1px solid var(--rule)}
+  .row:first-child{border-top:0;padding-top:0}
+  .row .when{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);padding-top:3px}
+  .row b{font-weight:600}
+  .row span{display:block;font-size:14.5px;color:var(--ink-2)}
+
+  footer{padding:26px 0 46px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+  @media (max-width:720px){
+    .interests{grid-template-columns:1fr}
+    .split{grid-template-columns:1fr}
+    .facts{grid-template-columns:1fr}
+    .facts > div{border-left:0;border-top:1px solid var(--rule)}
+    .facts > div:first-child{border-top:0}
+    .proj{padding:20px}
+    .pubs li,.row{grid-template-columns:1fr;gap:3px}
+    .bar nav{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#publications">Publications</a>
+      <a href="#experience">Experience</a>
+      <a href="#other">Other work</a>
+    </nav>
+    <button class="theme" id="theme" type="button" aria-label="Switch colour theme">Dark mode</button>
+  </div>
+
+  <header class="hero">
+    <div class="kicker">Semarang, Indonesia · B.Eng. expected 2027</div>
+    <h1>Yohanes Leonaldo Sinaga</h1>
+    <p class="lede">Electrical engineering undergraduate at Universitas Negeri Semarang (UNNES). I design robust controllers for high-gain DC-DC converters and take them from the model to the microcontroller to the bench. Alongside that, I build machine-learning models for building energy.</p>
+    <div class="links">
+      <button class="primary" id="mail" type="button">Email me</button>
+      <a href="https://github.com/yohanesleo5890">GitHub</a>
+      <!-- Enable once the public files/profiles exist:
+      <a href="cv.pdf">CV (PDF)</a>
+      <a href="https://scholar.google.com/citations?user=XXXX">Google Scholar</a>
+      <a href="https://orcid.org/0000-0000-0000-0000">ORCID</a>
+      <a href="https://www.linkedin.com/in/XXXX">LinkedIn</a> -->
+    </div>
+    <div class="contact-note" id="mailnote" aria-live="polite"></div>
+  </header>
+
+  <section aria-labelledby="h-int">
+    <div class="sec-head"><h2 id="h-int">Research interests</h2></div>
+    <div class="interests">
+      <div><b>Robust control of power converters</b><span>H∞ voltage control for high step-up DC-DC stages, where right-half-plane zeros and lightly damped resonances limit what a controller can do.</span></div>
+      <div><b>PV and renewable integration</b><span>The converter between a low-voltage source and a DC bus: photovoltaics, fuel cells, storage, and DC microgrids.</span></div>
+      <div><b>Machine learning for energy systems</b><span>Surrogate models and multi-objective optimisation that trade energy use against occupant comfort.</span></div>
+    </div>
+  </section>
+
+  <section id="projects" aria-labelledby="h-proj">
+    <div class="sec-head"><h2 id="h-proj">Featured projects</h2></div>
+
+    <!-- 1 · QBC + H-infinity -->
+    <article class="proj">
+      <div class="proj-top">
+        <h3>H∞ voltage control of a quadratic boost converter, from model to STM32</h3>
+        <span class="tag">Undergraduate thesis · 2025–2027</span>
+      </div>
+      <p class="problem">A quadratic boost converter reaches high gain with one switch, but its duty-to-output dynamics are fourth order, non-minimum phase, and barely damped. Most hardware-validated controllers for it need inductor-current sensing.</p>
+      <div class="split">
+        <div>
+          <p><b>What I built.</b> An 18 V to 150 V converter designed for continuous conduction, and a mixed-sensitivity H∞ controller that regulates it from the output voltage alone. The weighting functions are derived from the plant's physical limits (its right-half-plane zeros, its resonance, and the sensing chain) instead of being tuned by trial and error.</p>
+          <p>The same C controller code runs unchanged at every validation stage. I benchmark it against three voltage-mode controllers reproduced from the literature (frequency-response PI, MPSO-tuned PI, PSO-tuned fuzzy PI) under identical scenarios and stability limits. I also designed the board in KiCad and wrote the STM32F407 firmware.</p>
+        </div>
+        <figure>
+          <div class="frame"><img src="assets/qbc-topology.svg" alt="Circuit diagram of the single-switch quadratic boost converter: two inductors, three diodes, two capacitors and one MOSFET between source and load." width="700" height="412"></div>
+          <figcaption>Single-switch quadratic boost topology, gain 1/(1−D)².</figcaption>
+        </figure>
+      </div>
+      <div class="facts">
+        <div><div class="v">18 V → 150 V</div><div class="l">8.3× step-up at 167 W, 10 kHz switching, one voltage sensor</div></div>
+        <div><div class="v">100 µs</div><div class="l">control period of the 6th-order discrete controller running on an STM32F407</div></div>
+        <div><div class="v">4 controllers</div><div class="l">compared on one plant model, one scenario set, one set of stability margins (simulation)</div></div>
+      </div>
+      <div class="pipe" aria-label="Validation pipeline">
+        <span class="done">Model-in-the-loop</span><i>→</i>
+        <span class="done">Software-in-the-loop</span><i>→</i>
+        <span class="done">Processor-in-the-loop</span><i>→</i>
+        <span class="now">Hardware prototype · in test</span>
+      </div>
+      <p class="note">Results so far come from simulation and processor-in-the-loop tests. Experimental data and the full code will be released with the papers.</p>
+      <div class="meta">
+        <span>MATLAB/Simulink · Simscape Electrical · Robust Control Toolbox · C · STM32F407 · KiCad</span>
+        <span>Supervisor: Rizky Ajie Aprilianto, M.Eng.</span>
+      </div>
+    </article>
+
+    <!-- 2 · AI-OBEP -->
+    <article class="proj">
+      <div class="proj-top">
+        <h3>AI-OBEP: a learned surrogate and multi-objective optimisation for building energy and comfort</h3>
+        <span class="tag">Collaboration with UiTM, Malaysia · 2026</span>
+      </div>
+      <p class="problem">Cooling an office well means balancing energy against comfort, and a physics simulation is too slow to sit inside an optimiser.</p>
+      <p><b>What I built.</b> The machine-learning pipeline, in collaboration with a PhD researcher at Universiti Teknologi MARA. An XGBoost surrogate predicts HVAC energy from the open ROBOD dataset (NUS, Singapore); its hyperparameters are tuned by three metaheuristics I implemented and compared on an equal budget (PSO, GA, HHO). NSGA-II then searches room layouts and zone setpoints of 24 °C and above for the trade-off between energy and PMV thermal comfort, with SHAP used to check that the model's behaviour is physically sensible.</p>
+      <div class="pipe" aria-label="Method pipeline">
+        <span>ROBOD data</span><i>→</i><span>XGBoost surrogate, PSO / GA / HHO tuned</span><i>→</i><span>NSGA-II: energy vs comfort</span><i>→</i><span>Pareto set + SHAP</span>
+      </div>
+      <div class="facts">
+        <div><div class="v">R² 0.949</div><div class="l">on the reference paper's protocol, against 0.933 reported by Lyu et al. (2025)</div></div>
+        <div><div class="v">R² 0.941</div><div class="l">on a stricter protocol I added: whole days held out, hourly data</div></div>
+        <div><div class="v">ASHRAE G14</div><div class="l">hourly calibration criteria met: CV(RMSE) 27.3%, NMBE −4.1%</div></div>
+      </div>
+      <p class="note">A manuscript is in preparation, so this is a summary. The repository documents the method and its limits, including where the surrogate is weak.</p>
+      <div class="meta">
+        <span>Python · XGBoost · pymoo · SHAP · pythermalcomfort</span>
+        <a href="https://github.com/ikigai-arch/AI-OBEP">Repository</a>
+      </div>
+    </article>
+
+    <!-- 3 · DC microgrid -->
+    <article class="proj">
+      <div class="proj-top">
+        <h3>An 800 VDC renewable microgrid for an AI data centre, as an interactive 3D model</h3>
+        <span class="tag warm">Concept study · synthetic data</span>
+      </div>
+      <p class="problem">AI data centres are moving to high-voltage DC distribution. Feeding that bus from solar, wind, storage and hydrogen needs high-gain converters that stay stable as sources and loads swing.</p>
+      <p><b>What I built.</b> I proposed the concept and applied my thesis work to it: quadratic converters with H∞ control as the eight interface converters of a 2.4 MW IT "AI-Pod" at an industrial estate in Batang, Central Java. The browser model lays out the PV field, wind turbines, battery, hydrogen island and DC bus, shows power flow by day and night, and steps through four build-out phases from 2027 to 2030. It accompanies a team paper for the LOGRAK 2026 national competition (Tim Hore, UNNES).</p>
+      <div class="pipe" aria-label="System layout">
+        <span>PV · wind · battery · hydrogen</span><i>→</i><span>Quadratic converters C1–C8, H∞ control</span><i>→</i><span>800 VDC bus</span><i>→</i><span>AI-Pod, 2.4 MW IT</span>
+      </div>
+      <p class="note">Indicative scale. Every figure in the model comes from synthetic simulation and averaged converter models, not from measurements.</p>
+      <div class="meta">
+        <span>Three.js · JavaScript</span>
+        <a href="https://github.com/yarigainoarushigoto/DCMicroGrid3D">Repository</a>
+      </div>
+    </article>
+
+    <!-- 4 · SIGAP-Gambut -->
+    <article class="proj">
+      <div class="proj-top">
+        <h3>SIGAP-Gambut: a solar-powered LoRa sensor network for peat-fire risk</h3>
+        <span class="tag warm">Research competition entry · demo data</span>
+      </div>
+      <p class="problem">Peat fires start underground when the water table drops, usually far from power and mobile coverage. Risk has to be estimated on site, from a node that runs on its own energy.</p>
+      <div class="split">
+        <div>
+          <p><b>What I built.</b> The system design, end to end. A field node (TTGO LoRa32, 50 Wp panel, LiFePO4 battery) measures water-table depth, peat moisture, rainfall and temperature, and sends about 20 bytes every ten minutes over LoRa. A receiver forwards to MQTT, a FastAPI service stores readings in SQLite, and a web dashboard recomputes the Peat Fire Vulnerability Index each day and raises alerts.</p>
+          <p>I also modelled the node as a 53-part parametric 3D design, covering the mast, enclosure, power electronics and monitoring well, generated from one Python script.</p>
+        </div>
+        <figure class="pair">
+          <div class="frame">
+            <img src="assets/sigap-dashboard.jpg" alt="Dashboard showing water-table depth, peat moisture, rainfall and a rising fire-vulnerability index over fourteen days." width="1047" height="810" loading="lazy">
+            <img src="assets/sigap-node.jpg" alt="3D render of the sensor node: a tripod mast with a solar panel, rain gauge, locked enclosure and monitoring well." width="720" height="720" loading="lazy">
+          </div>
+          <figcaption>Dashboard in demo mode (simulated dry-season data) and the node design.</figcaption>
+        </figure>
+      </div>
+      <p class="note">The dashboard, backend and data contract are working; node firmware and field deployment are the next stage. Prepared for the BPDP student research competition, 2026–2027.</p>
+      <div class="meta">
+        <span>ESP32 · LoRa · MQTT · FastAPI · SQLite · Chart.js · Leaflet</span>
+        <a href="https://github.com/yarigainoarushigoto/SIGAP-Gambut">Dashboard</a>
+        <a href="https://github.com/yarigainoarushigoto/SIGAP-Gambut3DDesign">Node design</a>
+        <a href="https://yarigainoarushigoto.github.io/SIGAP-Gambut3DDesign/">3D viewer</a>
+      </div>
+    </article>
+  </section>
+
+  <section id="publications" aria-labelledby="h-pub">
+    <div class="sec-head"><h2 id="h-pub">Publications</h2></div>
+    <ul class="pubs">
+      <li>
+        <div class="st">Presented</div>
+        <div><div class="t">H-Infinity Control for Enhancing High-Gain Single-Switch Quadratic Semi-SEPIC Converter Performance</div>
+        <div class="a"><b>Y. L. Sinaga</b>, A. I. Putri, M. A. Adriansyah, T. Sutikno, R. A. Aprilianto, T. Wahono. Proc. EECSI 2026. Publication pending.</div></div>
+      </li>
+      <li>
+        <div class="st w">Under review</div>
+        <div><div class="t">H-Infinity Controller-Based Interleaved Buck Boost Converter for Solid Oxide Fuel Cell Applications</div>
+        <div class="a">R. A. Aprilianto, <b>Y. L. Sinaga</b>, et al. Journal submission, November 2026.</div></div>
+      </li>
+      <li>
+        <div class="st w">In preparation</div>
+        <div><div class="t">Hardware validation of an H∞-controlled quadratic boost converter</div>
+        <div class="a">First author. Two companion papers (staged MIL–SIL–PIL verification; digital IIR filtering of the feedback signal) and the AI-OBEP manuscript as co-author.</div></div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="experience" aria-labelledby="h-exp">
+    <div class="sec-head"><h2 id="h-exp">Experience</h2></div>
+    <div class="rows">
+      <div class="row"><div class="when">Jan – Jun 2026</div><div><b>Engineering intern, PT Rizqi Surya Energi (Solariz)</b><span>Installed residential rooftop PV systems of 3–5 kWp, including hybrid systems with battery storage. Simulated designs in PVsyst, surveyed sites, and supported inverter monitoring.</span></div></div>
+      <div class="row"><div class="when">Jul 2025 – present</div><div><b>Research assistant, UNNES Electrical Engineering Students Research Group</b><span>Designed wiring diagrams for PV installations, installed systems, and prepared reports, posters and articles.</span></div></div>
+      <div class="row"><div class="when">Mar 2025 – present</div><div><b>Assistant editor, Jurnal Teknik Elektro (UNNES)</b><span>Handle manuscripts from submission to publication.</span></div></div>
+      <div class="row"><div class="when">2025</div><div><b>Chair, Engineering Research Club, Faculty of Engineering</b><span>Led the faculty's student research club for one term.</span></div></div>
+    </div>
+  </section>
+
+  <section id="other" aria-labelledby="h-oth">
+    <div class="sec-head"><h2 id="h-oth">Other work</h2></div>
+    <div class="rows">
+      <div class="row"><div class="when">2026 – 2027</div><div><b>7th Kibo Robot Programming Challenge (JAXA)</b><span>Team entry programming the Int-Ball2 free-flying robot in Python and ROS. We work by pull request, and every change is checked against a 20-seed batch run in the simulator before it merges. <a href="https://github.com/yarigainoarushigoto/KIBORPCChallenge_Joss">Repository</a></span></div></div>
+      <div class="row"><div class="when">2025</div><div><b>Competitions and registered works</b><span>Second gold medal, International Walisongo Science Competition; first place, GEMASTE and the USC national essay competition. Three registered copyrights, including a MATLAB program for a solar-powered battery charging station.</span></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Yohanes Leonaldo Sinaga</span>
+    <span>Last updated 11 November 2026</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme');
+  function current(){
+    var t=root.getAttribute('data-theme');
+    if(t) return t;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';
+  }
+  function label(){ btn.textContent = current()==='dark' ? 'Light mode' : 'Dark mode'; }
+  try{ var saved=localStorage.getItem('theme'); if(saved==='dark'||saved==='light') root.setAttribute('data-theme',saved); }catch(e){}
+  label();
+  btn.addEventListener('click',function(){
+    var next=current()==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{ localStorage.setItem('theme',next); }catch(e){}
+    label();
+  });
+
+  // Address is assembled at click time so it is not in the page source as plain text.
+  var mail=document.getElementById('mail'), note=document.getElementById('mailnote');
+  mail.addEventListener('click',function(){
+    var a=['yohanesleo5890','gmail.com'].join('@');
+    note.textContent=a;
+    try{ window.location.href='mailto:'+a; }catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
